@@ -20,7 +20,6 @@ Image Processing Service is a minimal image upload microservice designed for fle
 - Clean Architecture (DDD + Ports & Adapters)
 - Transport via REST or gRPC
 - Optional API Key authentication for REST or gRPC (configurable in `.env`)
-- Async processing
 
 ---
 
