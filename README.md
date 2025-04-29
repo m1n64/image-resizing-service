@@ -80,7 +80,7 @@ file=<image>
 
 ### Upload image (binary)
 
-**POST** `/image/upload/binary`
+**POST** `/image/upload-binary`
 
 **Headers:**
 
