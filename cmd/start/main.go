@@ -73,7 +73,7 @@ func tokenAuthInterceptor(token string) grpc.UnaryServerInterceptor {
 		if !ok {
 			return nil, status.Error(codes.Unauthenticated, "missing metadata")
 		}
-		
+
 		authHeader, exists := md["authorization"]
 		if !exists || len(authHeader) == 0 {
 			return nil, status.Error(codes.Unauthenticated, "missing token")
