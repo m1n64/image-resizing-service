@@ -1,0 +1,19 @@
+services:
+  app:
+    build:
+      target: dev
+    command: air
+    ports:
+      - "5866:5864"
+
+  db:
+    ports:
+      - "5432:5432"
+
+  redis:
+    ports:
+      - "6379:6379"
+
+  minio:
+    ports:
+      - "9001:9001"

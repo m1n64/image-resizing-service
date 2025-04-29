@@ -1,0 +1,79 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: irs-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    restart: unless-stopped
+    volumes:
+      - irs_db_data:/var/lib/postgresql/data
+    networks:
+      - image-resizing-service
+
+  redis:
+    container_name: irs-redis
+    hostname: redis
+    image: redis:latest
+    volumes:
+      - irs_redis_data:/data
+    restart: unless-stopped
+    networks:
+      - image-resizing-service
+
+  minio:
+    image: minio/minio
+    container_name: irs-minio
+    ports:
+      - "9000:9000"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-admin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-admin}
+    command: server /data --address 0.0.0.0:9000 --console-address ":9001"
+    volumes:
+      - irs_minio_data:/data
+    networks:
+      - image-resizing-service
+
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: prod
+    container_name: irs-app
+    ports:
+      - "${SERVICE_PORT:-8000}:8000"
+      - "${GRPC_PORT:-50051}:50051"
+    volumes:
+      - ./:/app:cached
+    depends_on:
+      - db
+      - redis
+      - minio
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      DB_HOST: db
+      DB_PORT: ${POSTGRES_PORT:-5432}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASS: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+      MINIO_ENDPOINT: minio:9000
+      MINIO_SECURE: false
+      GIN_MODE: "release"
+    restart: unless-stopped
+    networks:
+      - image-resizing-service
+
+volumes:
+  irs_db_data:
+    driver: local
+  irs_redis_data:
+    driver: local
+  irs_minio_data:
+    driver: local
+
+networks:
+  image-resizing-service:
+    driver: bridge

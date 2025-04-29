@@ -1,0 +1,6 @@
+.idea/
+.vscode/
+.env
+tmp/*
+app.log
+main
