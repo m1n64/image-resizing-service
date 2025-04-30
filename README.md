@@ -1,4 +1,4 @@
-# Image Processing Service
+# 🖼 Image Processing Service
 
 Image Processing Service is a minimal image upload microservice designed for flexible embedding into third-party systems. It supports:
 
@@ -21,6 +21,7 @@ Image Processing Service is a minimal image upload microservice designed for fle
 - Transport via REST or gRPC
 - Optional API Key authentication for REST or gRPC (configurable in `.env`)
 
+> 💡 If you need a lightweight solution without external system dependencies, a simplified version of this service is available in this repository: **https://github.com/m1n64/image-resizing-shared-service**
 ---
 
 ## 🛠 Tech Stack
